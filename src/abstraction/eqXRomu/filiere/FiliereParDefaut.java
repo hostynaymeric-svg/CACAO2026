@@ -90,7 +90,7 @@ public class FiliereParDefaut extends Filiere {
 		this.ajouterActeur(new TransformateurX());
 		this.ajouterActeur(new Transformateur4());
 		this.ajouterActeur(new Distributeur2());
-		this.ajouterActeur(new Distributeur2());
+		this.ajouterActeur(new abstraction.eq9Distributeur2.Distributeur2());
 		this.ajouterActeur(new DistributeurX());
 		this.ajouterActeur(new Romu());
 		this.superviseurCC=new SuperviseurVentesContratCadre();
@@ -119,3 +119,4 @@ public class FiliereParDefaut extends Filiere {
 		super.initialiser();
 	}
 }
+
