@@ -25,7 +25,7 @@ public class Plantation {
             case F_BQ:
                 this.dureeDeVie = 960;  // 40 ans
                 this.tempsAvantProduction = 72;  // 3 ans
-                this.productionParParcelle = 105 000 ; //  fèves par parcelle a chaque next
+                this.productionParParcelle = 105000 ; //  fèves par parcelle a chaque next
                 this.prix_achat = ;
                 this.prix_vente = ;
                 this.prix_replantation = ;
@@ -35,7 +35,7 @@ public class Plantation {
             case F_MQ:
                 this.dureeDeVie = 960;
                 this.tempsAvantProduction = 72; // 3 ans
-                this.productionParParcelle = 85 000;
+                this.productionParParcelle = 85000;
                 this.prix_achat = ;
                 this.prix_vente = ;
                 this.prix_replantation = ;
@@ -45,7 +45,7 @@ public class Plantation {
             case F_HQ:
                 this.dureeDeVie = 960;
                 this.tempsAvantProduction = 72; // 5 ans
-                this.productionParParcelle = 63 000;
+                this.productionParParcelle = 63000;
                 this.prix_achat = ;
                 this.prix_vente = ;
                 this.prix_replantation = ;
