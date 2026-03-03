@@ -38,7 +38,7 @@ import abstraction.eq4Transformateur1.Transformateur1;
 import abstraction.eq5Transformateur2.Transformateur2;
 import abstraction.eq6Transformateur3.Transformateur3;
 import abstraction.eq7Distributeur1.Distributeur1;
-import abstraction.eq9Distributeur2.Distributeur2;
+import abstraction.eq8Distributeur2.Distributeur2;
 import abstraction.eqXRomu.acteurs.Romu;
 import abstraction.eqXRomu.filiere.Banque;
 import abstraction.eqXRomu.filiere.Filiere;
@@ -88,7 +88,7 @@ public class FenetrePrincipale extends JFrame {
 				Filiere.LA_FILIERE = new FiliereParDefaut(seed);
 			} else {
 				System.out.println(filiereChoisie);
-				IActeur[] equipes = { new Producteur1(), new Producteur2(), new Producteur3(), new Transformateur1(), new Transformateur2(), new Transformateur3(), new Distributeur1(), new Distributeur2(), new Distributeur2(), new Romu()};
+				IActeur[] equipes = { new Producteur1(), new Producteur2(), new Producteur3(), new Transformateur1(), new Transformateur2(), new Transformateur3(), new Distributeur1(), new Distributeur2(), new abstraction.eq9Distributeur2.Distributeur2(), new Romu()};
 				int i=0; 
 				while (i<equipes.length && !equipes[i].getNomsFilieresProposees().contains(filiereChoisie)) {
 					i++;
@@ -496,3 +496,4 @@ public class FenetrePrincipale extends JFrame {
 		LA_FENETRE_PRINCIPALE.setVisible(true);
 	}
 }
+
