@@ -15,16 +15,12 @@ import abstraction.eqXRomu.produits.IProduit;
 
 public class Producteur3Acteur implements IActeur {
 	private Journal journal_periode;
-	private Journal journal_stock_periode;
-	private Journal journal_des_ventes_en_bourses;
 	protected int cryptogramme;
 	protected HashMap<Feve,Variable> stock;
 	
 
 	public Producteur3Acteur() {
 		this.journal_periode = new Journal("Journal des périodes", this);
-		this.journal_stock_periode= new Journal ("Journal du stock restant par période",this);
-		this.journal_des_ventes_en_bourses=new Journal ("Journal des ventes en bourse",this);
 		this.stock = new HashMap<Feve, Variable>();
 		for (Feve f : Feve.values()) {
     		this.stock.put(f, new VariableReadOnly(this + " Stock " + f, this, 0.0));
@@ -52,10 +48,7 @@ public class Producteur3Acteur implements IActeur {
 		this.journal_periode.ajouter("période : "+ Filiere.LA_FILIERE.getEtape());
 		//défi 2
 		double totalStock=0.0;
-		for (Feve f : Feve.values()) {
-			totalStock+=this.stock.get(f).getValeur();
-		}
-		this.journal_stock_periode.ajouter("stock de la période "+ Filiere.LA_FILIERE.getEtape() + "="+ totalStock );
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER
@@ -82,8 +75,6 @@ public class Producteur3Acteur implements IActeur {
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journal_periode);
-		res.add(this.journal_des_ventes_en_bourses);
-		res.add(this.journal_stock_periode);
 		return res;
 	}
 
