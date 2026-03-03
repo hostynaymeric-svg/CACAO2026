@@ -8,22 +8,24 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.IProduit;
+import abstraction.eqXRomu.encheres.MiseAuxEncheres;
 
 public class Producteur1Acteur implements IActeur {
 
 
 	protected Journal journal;
 	protected int cryptogramme;
-	protected int stock;
+	protected float stock;
 
 	public Producteur1Acteur() {
 
 		//Créer un journal à chaque next  Elise Dossal
 		this.journal = new Journal("Journal "+this.getNom(), this);
 
-		//Ajoutez un indicateur du volume total de notre stock Elise Dossal
-		this.stock = 0;
+		//Ajoutez un indicateur du volume total de notre stock, en tonne Elise Dossal/Théophile Trillat
+		this.stock = 250000;
 	}
 	
 	public void initialiser() {
@@ -43,7 +45,11 @@ public class Producteur1Acteur implements IActeur {
 
 	public void next() {
 		this.journal.ajouter("Check");
-		
+
+		Producteur1VendeurBourse vendeur = new Producteur1VendeurBourse(this)
+		Feve F_MQ = Feve.F_MQ ;
+		MiseAuxEncheres mise = new MiseAuxEncheres(vendeur, F_MQ, 120., true);
+
 	}
 
 	public Color getColor() {// NE PAS MODIFIER

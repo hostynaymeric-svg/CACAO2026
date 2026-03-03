@@ -2,10 +2,10 @@ package abstraction.eq1Producteur1;
 
 import java.util.ArrayList;
 import java.util.List;
-import abstraction.eqXRomu.encheres.IVendeurAuxEncheres;
+import abstraction.eqXRomu.encheres.IAcheteurAuxEncheres;
 import abstraction.eqXRomu.encheres.MiseAuxEncheres;
 
-public class Producteur1VendeurBourse implements IVendeurAuxEncheres{
+public class Producteur1AcheteurBourse implements IAcheteurAuxEncheres{
 
     // Elise Dossal
 
@@ -14,7 +14,11 @@ public class Producteur1VendeurBourse implements IVendeurAuxEncheres{
     public Producteur1VendeurBourse(Producteur1Acteur acteur){
         this.acteur= acteur;
 
-    
+     }
+
+    public double proposerPrix(MiseAuxEncheres miseAuxEncheres){
+        
+
     }
 
 }
