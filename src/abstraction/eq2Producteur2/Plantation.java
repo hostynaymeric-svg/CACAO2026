@@ -12,7 +12,8 @@ public class Plantation {
     private double prix_vente; // Prix de vente de la plantation
     private double prix_replantation; // Prix de replantation de la plantation
     private double salaire_employe; // Prix que coûtent les employés par step par parcelle
-
+    private boolean replante = false;
+    
     public Plantation(Feve typeFeve, int parcelles, int age) {
         super();
         this.typeFeve = typeFeve;
