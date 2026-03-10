@@ -149,14 +149,12 @@ public class Récolte extends Producteur2Acteur {
 
     public void initialiser() {
         super.initialiser();
-        //Ajoute les parcelles de depart
-        for (int i = 1; i < 40; i++) {
-            int age_init = 1 + (i * 24);
-            ajouterPlantation(new Plantation(Feve.F_BQ,200000,age_init));
-            ajouterPlantation(new Plantation(Feve.F_MQ,500000,age_init));
-            ajouterPlantation(new Plantation(Feve.F_HQ,300000,age_init))
-            ajouterPlantation(new Plantation(Feve.F_HQ_E,0,age_init));
-        }
+        int age_init = 72;
+        ajouterPlantation(new Plantation(Feve.F_BQ,200000,age_init));
+        ajouterPlantation(new Plantation(Feve.F_MQ,500000,age_init));
+        ajouterPlantation(new Plantation(Feve.F_HQ,300000,age_init))
+        ajouterPlantation(new Plantation(Feve.F_HQ_E,0,age_init));
+        
     }
 
     public void next() {
