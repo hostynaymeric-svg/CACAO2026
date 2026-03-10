@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eqXRomu.produits.Gamme;
+import abstraction.eqXRomu.bourseCacao.BourseCacao;
 import abstraction.eqXRomu.bourseCacao.IAcheteurBourse;
+import abstraction.eqXRomu.encheres.MiseAuxEncheres;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
@@ -15,17 +17,13 @@ public class Producteur1AcheteurBourse extends Producteur1Acteur implements IAch
 
     private double achatMaxParStep;
 
-    public Producteur1AcheteurBourse() {
+    public Producteur1AcheteurBourse(double achatMaxParStep) {
         super();
-    }
-
-    public Producteur1AcheteurBourse(Feve feve, double stock, double achatMaxParStep) {
-        super(feve, stock);
         this.achatMaxParStep = achatMaxParStep;
     }
 
-    @Override
-    public double proposerPrix(MiseAuxEncheres miseAuxEncheres) {
+    
+    public double proposerPrix(MiseAuxEncheres miseAuxEncheres){
         return 0.0;
     }
 
