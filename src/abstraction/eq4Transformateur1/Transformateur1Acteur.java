@@ -14,7 +14,7 @@ import abstraction.eqXRomu.produits.IProduit;
 public class Transformateur1Acteur implements IActeur {
 	/**@author Ewan Lefort */
 	private Journal journal= new Journal("numéro de l'étape",this );
-	Transformateur1Stock stock= new Transformateur1Stock();
+	private Transformateur1Stock stock= new Transformateur1Stock();
 	protected int cryptogramme;
 
 	public Transformateur1Acteur() {
@@ -53,6 +53,11 @@ public class Transformateur1Acteur implements IActeur {
 	public String getDescription() {
 		return "Bla bla bla";
 	}
+
+	public Transformateur1Stock getStock(){
+		return this.getStock();
+	}
+
 	/**@author Ewan Lefort */
 	// Renvoie les indicateurs.
 	public List<Variable> getIndicateurs() {
