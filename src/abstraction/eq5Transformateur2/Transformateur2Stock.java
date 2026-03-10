@@ -46,81 +46,47 @@ public class Transformateur2Stock extends Transformateur2Acteur{
 
     // Méthodes
 
-    // Auteur Pierre
+    /** @author Pierre
+    **/
     public Double getStock_feve(){
         return this.stock_feve.get(Feve.F_BQ) + this.stock_feve.get(Feve.F_BQ_E) + this.stock_feve.get(Feve.F_MQ) + this.stock_feve.get(Feve.F_MQ_E) + this.stock_feve.get(Feve.F_HQ) + this.stock_feve.get(Feve.F_HQ_E);
         }
     
-    // Auteur Pierre
+    /** @author Pierre
+    **/
     public Double getStock_chocolat(){
         return this.stock_chocolat.get(Chocolat.C_BQ) + this.stock_feve.get(Chocolat.C_BQ_E) + this.stock_feve.get(Chocolat.C_MQ) + this.stock_feve.get(Chocolat.C_MQ_E) + this.stock_feve.get(Chocolat.C_HQ) + this.stock_feve.get(Chocolat.C_HQ_E);
         }
 
-    // Auteur Pierre
+    /** @author Pierre
+    **/
     public void add_feve(Double n, Feve Q){
-        if (Q == Feve.F_BQ){
-            this.stock_feve.put(Feve.F_BQ, this.stock_feve.get(Feve.F_BQ) + n);
-        } else if (Q == Feve.F_BQ_E){
-            this.stock_feve.put(Feve.F_BQ_E, this.stock_feve.get(Feve.F_BQ_E) + n);
-        } else if (Q == Feve.F_MQ){
-            this.stock_feve.put(Feve.F_MQ, this.stock_feve.get(Feve.F_MQ) + n);
-        } else if (Q == Feve.F_MQ_E){
-            this.stock_feve.put(Feve.F_MQ_E, this.stock_feve.get(Feve.F_MQ_E) + n);
-        } else if (Q == Feve.F_HQ){
-            this.stock_feve.put(Feve.F_HQ, this.stock_feve.get(Feve.F_HQ) + n);
-        } else {
-            this.stock_feve.put(Feve.F_HQ_E, this.stock_feve.get(Feve.F_HQ_E) + n);
-        }
+        assert n >= 0;
+        this.stock_feve.put(Q, this.stock_feve.get(Q) + n);
     }
 
-    // Auteur Pierre
+    /** @author Pierre
+    **/
     public void remove_feve(Double n, Feve Q){
-        if (Q == Feve.F_BQ & n <= this.stock_feve.get(Feve.F_BQ)){
-            this.stock_feve.put(Feve.F_BQ, this.stock_feve.get(Feve.F_BQ) - n);
-        } else if (Q == Feve.F_BQ_E & n <= this.stock_feve.get(Feve.F_BQ_E)){
-            this.stock_feve.put(Feve.F_BQ_E, this.stock_feve.get(Feve.F_BQ_E) - n);
-        } else if (Q == Feve.F_MQ & n <= this.stock_feve.get(Feve.F_MQ)){
-            this.stock_feve.put(Feve.F_MQ, this.stock_feve.get(Feve.F_MQ) - n);
-        } else if (Q == Feve.F_MQ_E & n <= this.stock_feve.get(Feve.F_MQ_E)){
-            this.stock_feve.put(Feve.F_MQ_E, this.stock_feve.get(Feve.F_MQ_E) - n);
-        } else if (Q == Feve.F_HQ & n <= this.stock_feve.get(Feve.F_HQ)){
-            this.stock_feve.put(Feve.F_HQ, this.stock_feve.get(Feve.F_HQ) - n);
-        } else if (n <= this.stock_feve.get(Feve.F_HQ_E)){
-            this.stock_feve.put(Feve.F_HQ_E, this.stock_feve.get(Feve.F_HQ_E) - n);
+        assert n <= 0;
+        if (n <= this.stock_feve.get(Q)){
+            this.stock_feve.put(Q, this.stock_feve.get(Q) - n);
         }
     }
 
-    // Auteur Raphaël
+    /** @author Raphaël
+    **/
     public void add_chocolat(Double n, Chocolat Q){
-        if (Q == Chocolat.C_BQ){
-            this.stock_chocolat.put(Chocolat.C_BQ, this.stock_chocolat.get(Chocolat.C_BQ) + n);
-        }else if (Q == Chocolat.C_BQ_E){
-            this.stock_chocolat.put(Chocolat.C_BQ_E, this.stock_chocolat.get(Chocolat.C_BQ_E) + n);
-        } else if (Q == Chocolat.C_MQ){
-            this.stock_chocolat.put(Chocolat.C_MQ, this.stock_chocolat.get(Chocolat.C_MQ) + n);
-        } else if (Q == Chocolat.C_MQ_E){
-            this.stock_chocolat.put(Chocolat.C_MQ_E, this.stock_chocolat.get(Chocolat.C_MQ_E) + n);
-        } else if (Q == Chocolat.C_HQ){
-            this.stock_chocolat.put(Chocolat.C_HQ, this.stock_chocolat.get(Chocolat.C_HQ) + n);
-        } else { 
-            this.stock_chocolat.put(Chocolat.C_HQ_E, this.stock_chocolat.get(Chocolat.C_HQ_E) + n); 
-            }
+        assert n >= 0;
+        this.stock_chocolat.put(Q, this.stock_chocolat.get(Q) + n);
     }
 
-    // Auteur Raphaël
+    /** @author Raphaël
+    **/
     public void remove_chocolat(Double n, Chocolat Q){
-        if (Q == Chocolat.C_BQ & n <= this.stock_chocolat.get(Chocolat.C_BQ)){
-            this.stock_chocolat.put(Chocolat.C_BQ, this.stock_chocolat.get(Chocolat.C_BQ) - n);
-        }else if (Q == Chocolat.C_BQ_E & n <= this.stock_chocolat.get(Chocolat.C_BQ_E)){
-            this.stock_chocolat.put(Chocolat.C_BQ_E, this.stock_chocolat.get(Chocolat.C_BQ_E) - n);
-        } else if (Q == Chocolat.C_MQ & n <= this.stock_chocolat.get(Chocolat.C_MQ)){
-            this.stock_chocolat.put(Chocolat.C_MQ, this.stock_chocolat.get(Chocolat.C_MQ) - n);
-        } else if (Q == Chocolat.C_MQ_E & n <= this.stock_chocolat.get(Chocolat.C_MQ_E)){
-            this.stock_chocolat.put(Chocolat.C_MQ_E, this.stock_chocolat.get(Chocolat.C_MQ_E) - n);
-        } else if (Q == Chocolat.C_HQ & n <= this.stock_chocolat.get(Chocolat.C_HQ)){
-            this.stock_chocolat.put(Chocolat.C_HQ, this.stock_chocolat.get(Chocolat.C_HQ) - n);
-        } else if (n <= this.stock_chocolat.get(Chocolat.C_HQ_E)){ 
-            this.stock_chocolat.put(Chocolat.C_HQ_E, this.stock_chocolat.get(Chocolat.C_HQ_E) - n); 
+        assert n <= 0;
+        if (n <= this.stock_chocolat.get(Q)){
+            this.stock_chocolat.put(Q, this.stock_chocolat.get(Q) - n); 
             }
     }
 
