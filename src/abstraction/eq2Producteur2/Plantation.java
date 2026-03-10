@@ -1,7 +1,6 @@
 package abstraction.eq2Producteur2;
 import abstraction.eqXRomu.produits.Feve;
 /** @author Paul */
-// @PAUL DELACOUR
 public class Plantation {
     private Feve typeFeve;          // Type de fèves cultivées
     private int parcelles;          // Nombre de parcelles de 1 ha
@@ -113,28 +112,51 @@ public class Plantation {
         return age;
     }
 
-    public boolean estEnProduction() {
+
+    public int getDureeDeVie() {
+        return dureeDeVie;
+    }
+
+    public int getTempsAvantProduction() {
+        return tempsAvantProduction;
+    }
+
+    public int getProductionParParcelle() {
+        return productionParParcelle;
+    }
+
+    // Méthode pour calculer la production totale de cette plantation
+    public double produire() {
+        if (age >= tempsAvantProduction && age < dureeDeVie) {
+            return parcelles * productionParParcelle;
+        }
+        return 0.0;
+    }
+
+    // Méthode pour vieillir la plantation d'un step
+    public void vieillir() {
+        age++;
+    }
+
+    // Méthode pour vérifier si la plantation est productive
+    public boolean estProductive() {
         return age >= tempsAvantProduction && age < dureeDeVie;
     }
 
-    public boolean estMorte() {
-        return age >= dureeDeVie;
-    }
+    public String getEtat() {
+        if (age < tempsAvantProduction) {
+            return "en croissance";
+        } 
+    
+        else if (age >= tempsAvantProduction && age < dureeDeVie) {
+            return "en production";
+        } 
+    
+        else if (age >= dureeDeVie) {
+            return "mort";
+        }
 
-    public void Replante() {
-        age = 0;
-        replante = true;
-    }
-
-    public boolean getReplante() {
-        return replante;
-    }
-
-    public double getprix_achat() {
-        return prix_achat;
-    }
-    public double getprix_replantation() {
-        return prix_replantation;
+        else return "inconnu";
     }
 
 }
