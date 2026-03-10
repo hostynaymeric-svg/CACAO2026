@@ -1,5 +1,5 @@
 package abstraction.eq2Producteur2;
-
+/** @author Paul */
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
