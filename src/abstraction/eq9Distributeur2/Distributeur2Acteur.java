@@ -18,6 +18,9 @@ public class Distributeur2Acteur implements IActeur {
 	protected Map<IProduit, Double> stock;
 	protected Variable indicateurStockTotal;
 
+	/**
+     * @author Paul Juhel
+     */ 
 	public Distributeur2Acteur() {
 		this.journal = new Journal("Journal EQ9", this);
 		this.stock = new HashMap<>();
@@ -101,6 +104,9 @@ public class Distributeur2Acteur implements IActeur {
 	}
 
 	// Renvoie les journaux
+		/**
+         * @author Paul Juhel
+         */ 
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal);
