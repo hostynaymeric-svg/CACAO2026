@@ -2,7 +2,8 @@ package abstraction.eq3Producteur3;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 
-public class Arbre_Hectare {
+public class Arbre_Hectare extends Producteur3VendeurBourse{
+    /** @author Victor Vannier-Moreau */
     private int age;
     private Feve feve;
     private int nb_arbre;
