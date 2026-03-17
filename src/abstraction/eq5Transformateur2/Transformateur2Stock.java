@@ -43,6 +43,15 @@ public class Transformateur2Stock extends Transformateur2Acteur{
     }
 
     // Méthodes
+    
+	/** @author Pierre
+    **/
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = super.getIndicateurs();
+        res.add(new Variable("Stock Fève", this, getStock_feve_total()));
+        res.add(new Variable("Stock Chocolat", this, getStock_feve_total()));
+		return res;
+	}
 
     /** @author Pierre
     **/
@@ -58,13 +67,13 @@ public class Transformateur2Stock extends Transformateur2Acteur{
     /**
      * @author Maxence
      */
-    public Double getStock_feve(Feve q){
+    public Double getStock_feve(IProduit q){
         return this.stock_feve.get(q);
     }
     /**
      * @author Maxence
      */
-    public Double getStock_chocolat(Chocolat q){
+    public Double getStock_chocolat(IProduit q){
         return this.stock_chocolat.get(q);
     }
     /** @author Pierre
