@@ -30,9 +30,9 @@ public class Transformateur3Acteur implements IActeur, IAcheteurBourse {
 		this.stockChocolat = new StockChocolat();
 		this.Eq6TotalStock = new VariablePrivee("Eq6TotalStock", "<html>Stock total de fèves+chocolats+chocolats de marque</html>", this, 0.0, 1000000.0, 0.0);
 	}
-	
+
+	/** @author : Pol Bailleul */
 	public void initialiser() {
-		//* @author : Pol Bailleul */
 		for (Feve feve : stockFeve.getFeves()) {
 			this.journal.ajouter("Stock de "+Journal.texteSurUneLargeurDe(feve+"", 15)+" = "+this.stockFeve.getQuantite(feve));
 			this.Eq6TotalStock.ajouter(this, this.stockFeve.getQuantite(feve),this.cryptogramme);
@@ -55,9 +55,8 @@ public class Transformateur3Acteur implements IActeur, IAcheteurBourse {
 	//         En lien avec l'interface graphique         //
 	////////////////////////////////////////////////////////
 
-
+	/** @author : Pol Bailleul */
 	public void next() {
-		//* @author : Pol Bailleul */
 		this.journal.ajouter("=== STOCKS === ");
 		for (Feve feve : stockFeve.getFeves()) {
 			this.journal.ajouter("Stock de "+Journal.texteSurUneLargeurDe(feve+"", 15)+" = "+this.stockFeve.getQuantite(feve));
@@ -164,7 +163,7 @@ public class Transformateur3Acteur implements IActeur, IAcheteurBourse {
 	
 	@Override
 	//Defi 3 : demande de 80 tonnes de fèves MQ à la bourse à chaque étape	
-	//* @author : Pol Bailleul */
+	/** @author : Pol Bailleul */
 	public double demande(Feve f, double cours) {
 		if (Feve.F_MQ.equals(f)) {
 			return 80.0;
@@ -175,7 +174,7 @@ public class Transformateur3Acteur implements IActeur, IAcheteurBourse {
 
 	@Override
 
-	//* @author : Pol Bailleul */
+	/** @author : Pol Bailleul */
 	public void notificationAchat(Feve f, double quantiteEnT, double coursEnEuroParT) {
 		int q = (int) Math.round(quantiteEnT);
 		this.stockFeve.ajouterQuantite(f, q);
@@ -187,6 +186,8 @@ public class Transformateur3Acteur implements IActeur, IAcheteurBourse {
 	 * Notification de blacklistage par la bourse.
 	 */
 	@Override
+
+	/** @author : Pol Bailleul */
 	public void notificationBlackList(int dureeEnStep) {
 		this.journal.ajouter("Blacklisté par la bourse pendant " + dureeEnStep + " étapes");
 	}
