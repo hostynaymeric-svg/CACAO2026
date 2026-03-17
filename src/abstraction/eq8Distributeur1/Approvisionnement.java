@@ -4,6 +4,7 @@ import java.util.List;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 
+/** @author Ewen Landron */
 public class Approvisionnement {
 
     private Distributeur1Acteur acteur;
@@ -22,7 +23,7 @@ public class Approvisionnement {
         List<ChocolatDeMarque> tousLesChocolats = Filiere.LA_FILIERE.getChocolatsProduits();
 
         // 2. Quantité arbitraire à acheter pour chaque produit (ex: 10 tonnes)
-        double quantiteAchat = 10.0; 
+        double quantiteAchat = 10.0;
 
         for (ChocolatDeMarque cdm : tousLesChocolats) {
             // On appelle la méthode de l'acteur qui devra gérer 
