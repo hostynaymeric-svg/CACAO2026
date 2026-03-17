@@ -1,6 +1,7 @@
 package abstraction.eq1Producteur1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
@@ -16,21 +17,16 @@ import abstraction.eqXRomu.produits.Feve;
 public class Producteur1VendeurBourse extends Producteur1AcheteurBourse implements IVendeurBourse{
 ///*
     protected List<Enchere> propositions;
-        private double enchere_BQ = 0;
-        private double enchere_BQ_E = 0;
-        private double enchere_MQ = 0;
-        private double enchere_MQ_E = 0;
-        private double enchere_HQ = 0;
-        private double enchere_HQ_E = 0;
+    private int blacklist=0;
 
     public Producteur1VendeurBourse(){
         super();
 
+
     }
 
-    
 
-    
+
 	/**
 	 * Retourne la quantite en tonnes de feves de type f que le vendeur 
 	 * souhaite vendre a cette etape sachant que le cours actuel de 
@@ -60,7 +56,7 @@ public class Producteur1VendeurBourse extends Producteur1AcheteurBourse implemen
 	public double notificationVente(Feve f, double quantiteEnT, double coursEnEuroParT){
         double vrai_quantite= Math.min(quantiteEnT,getStock(f));
         this.takeFeve(f, vrai_quantite);
-
+        return vrai_quantite;
     }
 
 	/**
@@ -71,7 +67,7 @@ public class Producteur1VendeurBourse extends Producteur1AcheteurBourse implemen
 	 * parametre 
 	 */
 	public void notificationBlackList(int dureeEnStep){
-
+        this.blacklist = dureeEnStep;
     }
 
 }
