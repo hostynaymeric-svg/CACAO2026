@@ -54,21 +54,6 @@ public class Producteur2Acteur implements IActeur, IVendeurBourse {
 	////////////////////////////////////////////////////////
 	/** @author Thomas */
 	public void next() {
-		// Production basée sur les plantations
-		for (Plantation p : this.plantations) {
-			if (p.estProductive()) {
-				double production = p.produire();
-				Variable stock = this.stocks.get(p.getTypeFeve());
-				if (stock != null) {
-					stock.setValeur(this, stock.getValeur() + production);
-				}
-				journal.ajouter("Production : " + production + " fèves " + p.getTypeFeve() + 
-							   " depuis " + p.getParcelles() + " hectares");
-			}
-			// Vieillir la plantation
-			p.add_age();
-		}
-		
 		// Calcul du stock total
 		double total = 0.0;
 		for (Feve f : Feve.values()) {
