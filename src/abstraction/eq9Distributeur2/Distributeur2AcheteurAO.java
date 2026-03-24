@@ -45,14 +45,19 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
                                    " (" + (stockActuel/1000) + "t). Lancement d'AO pour " + 
                                    (quantiteAcheter/1000) + "t");
                 
-                OffreVente offreRetenue = superviseurAO.acheterParAO(this, this.cryptogramme, choco, quantiteAcheter);
+                double quantiteAO = calculerQuantiteAchatVolume(choco, stockActuel);
+                if (quantiteAO < AppelDOffre.AO_QUANTITE_MIN) {
+                    continue;
+                }
+
+                OffreVente offreRetenue = superviseurAO.acheterParAO(this, this.cryptogramme, choco, quantiteAO);
                 
                 if (offreRetenue != null) {
-                    this.journal.ajouter("✅ Achat réussi : " + (quantiteAcheter/1000) + "t de " + 
+                    this.journal.ajouter("✅ Achat réussi : " + (quantiteAO/1000) + "t de " + 
                                        choco.getNom() + " à " + offreRetenue.getPrixT() + "€/T chez " + 
                                        offreRetenue.getVendeur().getNom());
                     
-                    this.stock.put(choco, stockActuel + quantiteAcheter);
+                    this.stock.put(choco, stockActuel + quantiteAO);
                     this.indicateurStockTotal.setValeur(this, getStockTotal());
                 } else {
                     this.journal.ajouter("❌ Échec : Aucune offre acceptable pour " + choco.getNom());
@@ -61,21 +66,59 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
         }
     }
 
+    /**
+     * Calcul du volume stratégique à acheter en AO selon prix moyen, tendance et capacité
+     */
+    protected double calculerQuantiteAchatVolume(ChocolatDeMarque choco, double stockActuel) {
+        if (Filiere.LA_FILIERE == null || choco == null) {
+            return 0.0;
+        }
+
+        final double capaciteStock = 500000.0;
+        final int COUVERTURE_STEPS = 6;
+
+        int etape = Filiere.LA_FILIERE.getEtape();
+        double ventesRecentes = (etape >= 1) ? Filiere.LA_FILIERE.getVentes(choco, etape - 1) : 0.0;
+        double prixMoyen = (etape >= 1) ? Filiere.LA_FILIERE.prixMoyen(choco, etape - 1) : Double.NaN;
+
+        double stockCible = ventesRecentes * COUVERTURE_STEPS;
+        double besoin = Math.max(0.0, stockCible - stockActuel);
+        double marge = Math.max(0.0, capaciteStock - stockActuel);
+        double quantite = Math.min(besoin, marge);
+
+        double prixActuel = prix(choco);
+        if (!Double.isNaN(prixMoyen) && prixActuel < prixMoyen) {
+            quantite = Math.min(quantite * 1.5, marge);
+        }
+
+        double stockMax = capaciteStock * 0.95;
+        if (stockActuel >= stockMax) {
+            return 0.0;
+        }
+
+        return Math.max(0.0, quantite);
+    }
+
     //  Le superviseur donne la liste de toutes les propositions de vente
     public OffreVente choisirOV(List<OffreVente> propositions) {
         OffreVente meilleureOffre = null;
+        double meilleurScore = Double.MAX_VALUE;
         double meilleurPrix = Double.MAX_VALUE;
         
         // Prix maximum acceptable selon la qualité du chocolat demandé
         double prixMaxAcceptable = 30000.0; // 30 000 €/T maximum
         
-        // On compare les offres concurrentes pour prendre la moins chère 
+        // On compare les offres concurrentes pour prendre la meilleure valeur prix/volume/conditions
         for (OffreVente offre : propositions) {
             double prixPropose = offre.getPrixT();
-            
-            if (prixPropose < meilleurPrix && prixPropose <= prixMaxAcceptable) {
-                meilleurPrix = prixPropose;
+            double volume = offre.getOffre().getQuantiteT();
+            double penalites = evaluerConditionsOffre(offre);
+            double score = (prixPropose / Math.max(1.0, volume)) + penalites;
+
+            if (score < meilleurScore && prixPropose <= prixMaxAcceptable) {
+                meilleurScore = score;
                 meilleureOffre = offre;
+                meilleurPrix = prixPropose;
             }
         }
         
@@ -88,5 +131,21 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
         }
         
         return meilleureOffre;
+    }
+
+    /**
+     * Évalue des conditions de l'offre (retard potentiel, minimum de quantité, etc.)
+     */
+    protected double evaluerConditionsOffre(OffreVente offre) {
+        if (offre == null) {
+            return 1000.0;
+        }
+        // Pénalités de base : plus la quantité est faible, plus c'est coûteux (frais fixes)
+        double volume = offre.getOffre().getQuantiteT();
+        double penaliteVolume = (volume <= 0) ? 100.0 : 50.0 / volume;
+
+        // Si vendeur déjà connu, on pourrait appliquer une prime de fidélité via CC
+        // (rien de dispo ici, on garde simple)
+        return penaliteVolume;
     }
 }

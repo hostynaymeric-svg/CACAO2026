@@ -3,6 +3,7 @@ package abstraction.eq9Distributeur2;
 import abstraction.eqXRomu.contratsCadres.Echeancier;
 import abstraction.eqXRomu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eqXRomu.contratsCadres.IAcheteurContratCadre;
+import abstraction.eqXRomu.contratsCadres.IVendeurContratCadre;
 import abstraction.eqXRomu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
@@ -15,7 +16,7 @@ import java.util.List;
  * Distributeur2AcheteurCC - Implémentation simple des contrats cadres pour le distributeur
  * Hérite de Distributeur2Acteur et implémente IAcheteurContratCadre
  */
-public class Distributeur2AcheteurCC extends Distributeur2Acteur implements IAcheteurContratCadre {
+public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements IAcheteurContratCadre {
 
     // Superviseur des contrats cadres
     private SuperviseurVentesContratCadre superviseurCC;
@@ -26,6 +27,9 @@ public class Distributeur2AcheteurCC extends Distributeur2Acteur implements IAch
     // Liste des contrats terminés
     protected List<ExemplaireContratCadre> contratsTermines;
 
+    // score de fidélité par vendeur logique opportuniste
+    protected java.util.Map<IVendeurContratCadre, Double> scoreFidelite;
+
     /**
      * Constructeur
      */
@@ -33,6 +37,7 @@ public class Distributeur2AcheteurCC extends Distributeur2Acteur implements IAch
         super();
         this.contratsEnCours = new LinkedList<ExemplaireContratCadre>();
         this.contratsTermines = new LinkedList<ExemplaireContratCadre>();
+        this.scoreFidelite = new java.util.HashMap<IVendeurContratCadre, Double>();
     }
 
     /**
@@ -63,7 +68,23 @@ public class Distributeur2AcheteurCC extends Distributeur2Acteur implements IAch
         }
         this.contratsEnCours.removeAll(aRetirer);
 
+        this.evaluerFideliteContrats();
         this.journal.ajouter("Contrats en cours : " + this.contratsEnCours.size());
+    }
+
+    /**
+     * Evaluation de la fidélité fournisseur et affichage des décisions
+     */
+    protected void evaluerFideliteContrats() {
+        for (ExemplaireContratCadre contrat : this.contratsEnCours) {
+            IVendeurContratCadre vendeur = contrat.getVendeur();
+            double prixCD = contrat.getPrix();
+            double prixConcurrent = prixCD * 0.98; // hypothèse prix concurrent meilleur
+            boolean garder = garderFournisseur(vendeur, prixCD, prixConcurrent);
+            if (!garder) {
+                this.journal.ajouter("🔁 Remplacement opportuniste du fournisseur " + vendeur.getNom() + " (prix=" + prixCD + ")");
+            }
+        }
     }
 
     // =================================================================
@@ -120,8 +141,32 @@ public class Distributeur2AcheteurCC extends Distributeur2Acteur implements IAch
     @Override
     public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
         this.contratsEnCours.add(contrat);
+
+        // Mise à jour fidélité (garde si contrat priorisé)
+        IVendeurContratCadre v = contrat.getVendeur();
+        double oldScore = this.scoreFidelite.getOrDefault(v, 0.3);
+        double nouvelScore = Math.min(1.0, oldScore + 0.10);
+        this.scoreFidelite.put(v, nouvelScore);
+
         this.journal.ajouter("Nouveau contrat cadre signé pour " + contrat.getProduit() +
-                           " : " + contrat.getQuantiteTotale() + "t à " + contrat.getPrix() + "€/t");
+                           " : " + contrat.getQuantiteTotale() + "t à " + contrat.getPrix() + "€/t" +
+                           " (score fidélité " + String.format("%.2f", nouvelScore) + ")");
+    }
+
+    /**
+     * Détermination opportuniste de conservation d'un fournisseur
+     */
+    public boolean garderFournisseur(IVendeurContratCadre vendeur, double prixActuel, double prixConcurrentMax) {
+        double remiseHistorique = this.scoreFidelite.getOrDefault(vendeur, 0.3);
+        double diffRel = (prixActuel - prixConcurrentMax) / Math.max(1.0, prixConcurrentMax);
+
+        if (diffRel > 0.05 && remiseHistorique < 0.6) {
+            return false;
+        }
+        if (remiseHistorique >= 0.7) {
+            return true;
+        }
+        return diffRel <= 0.03;
     }
 
     /**
