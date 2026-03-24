@@ -94,6 +94,9 @@ public class Producteur1VendeurContractCadre extends Producteur1VendeurAuxEncher
 	 *  est inferieure a celle precisee en parametre
 	 */
 	public double livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat){
-        return quantite;
+        
+        double vrai_quantite= Math.min(quantite,getStock((Feve)produit));
+        this.takeFeve((Feve)produit, vrai_quantite);
+        return vrai_quantite;
     }
 }
