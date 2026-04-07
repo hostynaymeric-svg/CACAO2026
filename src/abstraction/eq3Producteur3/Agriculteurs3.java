@@ -11,7 +11,7 @@ public class Agriculteurs3 extends Producteur3Acteur {
     private boolean exploitationEnfant; 
 
     public void Agriculteur3(Plantation3 plantation) {
-        this.nbCDI = 30 * plantation.getNbHectareTotal();
+        this.nbCDI = 30 * plantation.getNbHectareTotal(); // 30 employés adultes par hectare 
         this.nbInterim = 0;
         this.nbEnfant = 0; // Entrerpise éthique : aucun enfants exploités 
         this.salaireCDI = 12.0; // On les rémunères au max décidé dans les règles de fonctionnement (0.8€/jour)
