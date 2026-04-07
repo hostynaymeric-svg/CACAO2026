@@ -19,11 +19,11 @@ import abstraction.eqXRomu.produits.Feve;
 public class Transformateur1VendeurEnchere extends Transformateur1VendeurCC implements IVendeurAuxEncheres{
     private HashMap<ChocolatDeMarque, List<Double>> prixRetenus;
 	private SuperviseurVentesAuxEncheres supEncheres;
-	protected Journal journalEncheres;
+	protected Journal journalVendeurEncheres;
 
 	public Transformateur1VendeurEnchere() {
 		super();
-		this.journalEncheres = new Journal(this.getNom()+" journal Encheres", this);
+		this.journalVendeurEncheres = new Journal(this.getNom()+" journal Vendeur Encheres", this);
 	}
 
 	public void initialiser() {
@@ -37,26 +37,26 @@ public class Transformateur1VendeurEnchere extends Transformateur1VendeurCC impl
 
 	public void next() {
 		super.next();
-		this.journalEncheres.ajouter("=== STEP "+Filiere.LA_FILIERE.getEtape()+" ====================");
+		this.journalVendeurEncheres.ajouter("=== STEP "+Filiere.LA_FILIERE.getEtape()+" ====================");
 		for (ChocolatDeMarque cm : this.getChocolatsProduits()) {
 			if (this.getStock().get(cm)>5000) { // on ne lance pas une enchere pour moins de 5000 T
 				int quantite = 5000 + Filiere.random.nextInt((int)(this.getStock().get(cm)-4990)); // il faudrait aussi tenir compte des contrats cadres en cours afin de ne pas vendre ce qu'on s'est engage a livrer
 				Enchere enchere = supEncheres.vendreAuxEncheres(this, cryptogramme, cm, quantite);
-				journalEncheres.ajouter("   Je lance une enchere de "+quantite+" T de "+cm);
+				journalVendeurEncheres.ajouter("   Je lance une enchere de "+quantite+" T de "+cm);
 				if (enchere!=null) { // on a retenu l'une des encheres faites
-					journalEncheres.ajouter("   Enchere finalisee : on retire "+quantite+" T de "+cm+" du stock");
+					journalVendeurEncheres.ajouter("   Enchere finalisee : on retire "+quantite+" T de "+cm+" du stock");
 					this.getStock().put(cm, this.getStock().get(cm)-quantite);
 					prixRetenus.get(cm).add(enchere.getPrixTonne());
 					if (prixRetenus.get(cm).size()>10) {
 						prixRetenus.get(cm).remove(0); // on ne garde que les dix derniers prix
-						journalEncheres.ajouter("   Les derniers prix pour "+cm+" sont "+prixRetenus.get(cm));
+						journalVendeurEncheres.ajouter("   Les derniers prix pour "+cm+" sont "+prixRetenus.get(cm));
 					}
 				}
 			}
 		}
 
 		// On archive les contrats termines
-		this.journalEncheres.ajouter("=================================");
+		this.journalVendeurEncheres.ajouter("=================================");
 	}
 
 	public double prixMoyen(ChocolatDeMarque cm) {
@@ -93,7 +93,7 @@ public class Transformateur1VendeurEnchere extends Transformateur1VendeurCC impl
 	
 	public List<Journal> getJournaux() {
 		List<Journal> jx=super.getJournaux();
-		jx.add(journalEncheres);
+		jx.add(journalVendeurEncheres);
 		return jx;
 	}
 }
