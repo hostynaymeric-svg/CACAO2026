@@ -219,6 +219,26 @@ public class Distributeur1Acteur implements IActeur, IDistributeurChocolatDeMarq
 		return res;
 	}
 
+		// Renvoie les couts
+	/** @author Lucas Levillain */
+	public HashMap<String, Double> getCouts() {
+		HashMap<String, Double> couts = new HashMap<String, Double>();
+
+		double coutStockage = 0.0;
+		double coutMiseEnRayon = 0.0;
+
+		List<ChocolatDeMarque> p = Filiere.LA_FILIERE.getChocolatsProduits();
+		for (int i = 0; i < p.size(); i++) {
+			IProduit prod = (IProduit) p.get(i);
+			coutStockage += getQuantiteEnStock(prod, this.cryptogramme) * this.coutStockageParTonne;
+			coutMiseEnRayon += getQuantiteEnRayon(prod, this.cryptogramme) * this.coutMiseEnRayonParTonne;
+		}
+
+		couts.put("stockage", coutStockage);
+		couts.put("miseEnRayon", coutMiseEnRayon);
+		return couts;
+	}
+	
 	////////////////////////////////////////////////////////
 	//               En lien avec la Banque               //
 	////////////////////////////////////////////////////////
