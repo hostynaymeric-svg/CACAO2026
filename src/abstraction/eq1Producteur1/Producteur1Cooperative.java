@@ -64,6 +64,7 @@ public class Producteur1Cooperative extends Producteur1Planteur{
         double montant = this.coopEq.get("nombre adultes")* this.coopEq.get("salaire adulte") + this.coopNonEq.get("nombre adultes")*this.coopNonEq.get("nombre adultes") +this.coopEq.get("salaire enfant")*this.coopEq.get("nombre enfant");
         Banque banque=Filiere.LA_FILIERE.getBanque();
         banque.payerCout(this, this.cryptogramme, "Masse salariale" , 15 * montant);
+        this.journal.ajouter("Salaire payé : " + montant);
     }
 
 
@@ -85,6 +86,7 @@ public class Producteur1Cooperative extends Producteur1Planteur{
     public void next(){
         super.next();
         this.payerSalaire();
+
     }
 
 }

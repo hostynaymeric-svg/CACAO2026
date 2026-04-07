@@ -139,6 +139,7 @@ public class Producteur1Stock extends Producteur1Acteur{
         double montant = 180 * this.totalStock;
         Banque banque=Filiere.LA_FILIERE.getBanque();
         banque.payerCout(this, this.cryptogramme, "Loyer Stockage" , montant);
+        this.journal.ajouter("Loyer Stockage : " + montant);
     }
     
     public void next() {
