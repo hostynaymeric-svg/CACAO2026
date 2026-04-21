@@ -26,11 +26,11 @@ public class Transformateur3VendeurAppelDOffre extends Transformateur3VendeurAux
     }
 
     public void initialiser() {
-		super.initialiser();
-		this.prixAO = new HashMap<ChocolatDeMarque, List<Double>>();
-		for (ChocolatDeMarque cm : this.getChocolatsProduits()) {
+    super.initialiser();
+    this.prixAO = new HashMap<ChocolatDeMarque, List<Double>>();
+    for (ChocolatDeMarque cm : this.getChocolatsProduits()) {
         this.prixAO.put(cm, new LinkedList<Double>());
-	}
+    }
 	}
 	public double prixMoyen(ChocolatDeMarque cm) {
 		List<Double> prix=prixAO.get(cm);
