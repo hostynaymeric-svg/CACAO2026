@@ -1,6 +1,9 @@
 package abstraction.eq3Producteur3;
+import java.util.List;
+
 import abstraction.eq3Producteur3.Agriculteurs3;
 import abstraction.eqXRomu.filiere.Filiere;
+import abstraction.eqXRomu.produits.Gamme;
 
 /** @author Guillaume Leroy*/
 public class GestionCouts3 {
@@ -31,10 +34,11 @@ public class GestionCouts3 {
         acteur.journal_cout_periode.ajouter("Période " + Filiere.LA_FILIERE.getEtape() + " : coût main d'oeuvre = " + coutMO);
         Filiere.LA_FILIERE.getBanque().payerCout(acteur, acteur.cryptogramme, "Coût de la main d'oeuvre", coutMO);
 
-        if (acteur.agriculteurs.estEthique()){
-            acteur.journal_cout_periode.ajouter("Période " + Filiere.LA_FILIERE.getEtape() + " : label Happyworker = " + this.coutLabelHappyWorker);
+        for (Gamme g : List.of(Gamme.BQ, Gamme.MQ, Gamme.HQ)) {
+        if (acteur.agriculteurs.estEthique(g)){ // à modifier en fonction du ratio d'équitable dans une gamme
+            acteur.journal_cout_periode.ajouter("Période " + Filiere.LA_FILIERE.getEtape() + " : label Happyworker pour " + g.toString() +" = "+ this.coutLabelHappyWorker);
             Filiere.LA_FILIERE.getBanque().payerCout(acteur, acteur.cryptogramme, "label Happyworker", this.coutLabelHappyWorker);
-        }
+        }}
     }
     
     public double getCoutTot(Producteur3Acteur acteur){
