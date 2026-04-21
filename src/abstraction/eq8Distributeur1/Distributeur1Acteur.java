@@ -25,6 +25,7 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	protected Journal journal5;/** @author Ewen Landron */
 	protected Variable volumeStock;/** @author Alexandre Cornet */
 	protected HashMap<IProduit, Double> Rayon;/** @author Alexandre Cornet */
+	protected HashMap<IProduit, Double> RayonPrecedent;/** @author Alexandre Cornet */
 	protected int cryptogramme;/** @author Alexandre Cornet */
 	protected HashMap<IProduit, Double> Stock;/** @author Alexandre Cornet */
 	protected HashMap<IProduit, Double> Prix;/** @author Alexandre Cornet */
@@ -45,19 +46,20 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 		this.journal5 = new Journal("Journal EQ8 Contrats ", this);
 		this.volumeStock=new Variable("EQ8 StockTotal", this); 
 		this.Rayon = new HashMap<IProduit, Double>(); 
+		this.RayonPrecedent = new HashMap<IProduit, Double>(); 
 		this.Stock = new HashMap<IProduit, Double>();
 		this.Prix = new HashMap<IProduit, Double>();
 		this.ChocolatsAchetes = new HashMap<ChocolatDeMarque, Double>();
-		this.TailleRayon = 1000.0;
+		this.TailleRayon = 10000.0;
 		this.volumerayon = 0.0;
 	}
 	/** @author Alexandre Cornet */
 	public void initialiser() {
 		List<ChocolatDeMarque> p=Filiere.LA_FILIERE.getChocolatsProduits();
 		for (int i=0; i<p.size(); i++){
-			this.Stock.put((IProduit)(p.get(i)),500.0);
+			this.Stock.put((IProduit)(p.get(i)),50000.0);
 			this.Rayon.put((IProduit)(p.get(i)),0.0);
-			this.Prix.put((IProduit)(p.get(i)),8000.0);
+			this.Prix.put((IProduit)(p.get(i)),1000.0);
 			this.volumeStock.ajouter(this,getQuantiteEnStock((IProduit)(p.get(i)),this.cryptogramme));
 		}
 	}
@@ -78,6 +80,7 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 		 * @author Ewen Landron
          */ 
 	public void next() {
+		/** 
 		List<ChocolatDeMarque> p=Filiere.LA_FILIERE.getChocolatsProduits();
 		Banque b=Filiere.LA_FILIERE.getBanque();
 		Variable v=this.getvolumestock();
@@ -122,6 +125,7 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 		b.payerCout(this, this.cryptogramme, "Frais de Stockage", v1*0.01);
 		this.journal4.ajouter("Frais de Stockage : "+v1*0.01+" €");
 		this.journal4.ajouter("----------------------------------------------");
+		*/
 		
 	}
 
@@ -299,6 +303,7 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 		if (this.cryptogramme==cryptogramme) { // c'est donc bien un acteur assermente qui demande a consulter la quantite en stock
 			return this.Rayon.get(p);
 		} else {
+			System.out.println(" 0 en rayon");
 			return 0; // Les acteurs non assermentes n'ont pas a connaitre notre stock
 		}
 	}
@@ -309,8 +314,10 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 			/**
 			this.Prix(p).put(IProduit)(p, value : (CoutParArticle.getOrDefault() + prixDAchat.getOrDefault())*1,1)
 			 */
+			System.out.println(" "+this.Prix.get(p));
 			return this.Prix.get(p);
 		} else {
+			System.out.println(" 000");
 			return 0; // Les acteurs non assermentes n'ont pas a connaitre notre stock
 		}
 	}
@@ -323,6 +330,7 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	/** @author Alexandre Cornet */
 	@Override
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
+		System.out.println(this.getQuantiteEnRayon(choco, this.cryptogramme)+ " en vente");
 		return this.getQuantiteEnRayon(choco, this.cryptogramme);
 	}
 	/** @author Alexandre Cornet */
