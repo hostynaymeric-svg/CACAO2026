@@ -8,12 +8,8 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.general.Journal;
 
 /**
- * Gere les differentes marques et leurs specificites.
- * Chaque transformateur a sa marque.
- * EQ9 a sa propre marque : EQ9.
- * 
- * @author Équipe EQ9
- * @version V2 - 28/04/2026
+
+
  */
 public class EQ9_GestionnaireMarques {
     

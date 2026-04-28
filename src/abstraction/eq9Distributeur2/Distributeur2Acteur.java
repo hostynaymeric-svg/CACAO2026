@@ -14,9 +14,6 @@ import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
-import abstraction.eq9Distributeur2.EQ9_StrategieFixationPrix;
-import abstraction.eq9Distributeur2.EQ9_GestionnaireMarques;
-import abstraction.eq9Distributeur2.EQ9_MarquePrivee;
 
 public class Distributeur2Acteur implements IActeur, IDistributeurChocolatDeMarque, IMarqueChocolat {
 	protected int cryptogramme;
@@ -30,7 +27,7 @@ public class Distributeur2Acteur implements IActeur, IDistributeurChocolatDeMarq
     protected EQ9_GestionnaireMarques gestionnaireMarques;
     protected EQ9_MarquePrivee marquePrivee;
 
-    public static final String NOM_MARQUE = "Carrefour Selection";
+    public static final String NOM_MARQUE = "EQ9";
     protected Variable indicateurMargeMoyenne;
     protected Variable indicateurMixMarquePrivee;
     protected Variable indicateurProfitBrutEtape;
