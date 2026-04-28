@@ -15,6 +15,8 @@ import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.produits.IProduit;
 
+/**@author Pol Bailleul */
+
 public class Transformateur3VendeurAppelDOffre extends Transformateur3VendeurAuxEncheres implements IVendeurAO {
 
     private HashMap<ChocolatDeMarque, List<Double>> prixAO;
