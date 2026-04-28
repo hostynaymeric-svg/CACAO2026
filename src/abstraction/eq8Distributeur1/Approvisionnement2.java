@@ -20,9 +20,10 @@ public class Approvisionnement2 extends Distributeur1Acteur {
     private Map<ChocolatDeMarque, Double> stockPredit;
     private Map<String, List<ChocolatDeMarque>> classements;
     protected List<ExemplaireContratCadre> mesContrats;
+    protected double pourcentBQ, pourcentBQ_E, pourcentMQ, pourcentMQ_E, pourcentHQ, pourcentHQ_E;
 
     public Approvisionnement2() {
-        super(); // Appelle le constructeur de Distributeur1Acteur
+        super();
         this.prixDAchat = new HashMap<>();
         this.classements = new HashMap<>();
         this.classements.put("BQ", new ArrayList<>());
@@ -31,8 +32,17 @@ public class Approvisionnement2 extends Distributeur1Acteur {
         this.classements.put("MQ_EQUITABLE", new ArrayList<>());
         this.classements.put("HQ", new ArrayList<>());
         this.classements.put("HQ_EQUITABLE", new ArrayList<>());
+    
         this.mesContrats = new ArrayList<>();
         this.stockPredit = new HashMap<>();
+
+        // Initialisation des pourcentages de répartition (Total = 1.0)
+        this.pourcentBQ = 0.15;   // 15% Bas de gamme standard
+        this.pourcentBQ_E = 0.05; // 5%  Bas de gamme équitable
+        this.pourcentMQ = 0.35;   // 35% Milieu de gamme standard
+        this.pourcentMQ_E = 0.10; // 10% Milieu de gamme équitable
+        this.pourcentHQ = 0.20;   // 20% Haut de gamme standard
+        this.pourcentHQ_E = 0.15; // 15% Haut de gamme équitable
     }
 
     /**
@@ -99,62 +109,63 @@ public class Approvisionnement2 extends Distributeur1Acteur {
     }
 
     public void lancerApprovisionnementGeneral(double volumeCibleTotal) {
-        // On initialise le stock prédit à partir du stock réel hérité
         this.stockPredit = initialiserStockPredit();
 
-        double cibleBasse = volumeCibleTotal * 0.20;
-        double cibleMoyenne = volumeCibleTotal * 0.45;
-        double cibleHaute = volumeCibleTotal * 0.35;
-
-        acheterParGamme(Gamme.BQ, cibleBasse);
-        acheterParGamme(Gamme.MQ, cibleMoyenne);
-        acheterParGamme(Gamme.HQ, cibleHaute);
-    }
-
-    private void acheterParGamme(Gamme gamme, double volumeCibleGamme) {
-        List<ChocolatDeMarque> equitables = getListeTriee(gamme, true);
-        List<ChocolatDeMarque> standards = getListeTriee(gamme, false);
-
-        parcourirEtAcheter(equitables, volumeCibleGamme);
-        parcourirEtAcheter(standards, volumeCibleGamme);
-    }
-
-    private void parcourirEtAcheter(List<ChocolatDeMarque> liste, double volumeCibleGamme) {
-        for (int i = 0; i < liste.size(); i++) {
-            ChocolatDeMarque actuel = liste.get(i);
-            double prixCible = this.prixDAchat.getOrDefault(actuel, 1000.0);
-            
-            double prixMax;
-            if (i < liste.size() - 1) {
-                ChocolatDeMarque suivant = liste.get(i + 1);
-                prixMax = this.prixDAchat.getOrDefault(suivant, prixCible * 1.2);
-            } else {
-                prixMax = prixCible * 1.2;
-            }
-            remplirProduit(actuel, volumeCibleGamme, prixCible, prixMax);
-        }
-    }
-
-    private void remplirProduit(ChocolatDeMarque cdm, double volumeCibleGamme, double prixCible, double prixMax) {
-        double stockActuelGamme = calculerStockGamme(cdm.getGamme());
+        // Calcul des cibles pour les 6 catégories
+        acheterParCategorie(Gamme.BQ, false, volumeCibleTotal * this.pourcentBQ);
+        acheterParCategorie(Gamme.BQ, true,  volumeCibleTotal * this.pourcentBQ_E);
     
-        if (stockActuelGamme < volumeCibleGamme) {
-            double besoin = volumeCibleGamme - stockActuelGamme;
-            // La méthode est maintenant void, l'actualisation du stock est interne
-            methodeIntermediaireAchat(cdm, besoin, prixCible, prixMax);
+        acheterParCategorie(Gamme.MQ, false, volumeCibleTotal * this.pourcentMQ);
+        acheterParCategorie(Gamme.MQ, true,  volumeCibleTotal * this.pourcentMQ_E);
+    
+        acheterParCategorie(Gamme.HQ, false, volumeCibleTotal * this.pourcentHQ);
+        acheterParCategorie(Gamme.HQ, true,  volumeCibleTotal * this.pourcentHQ_E);
+    }
+
+    private void acheterParCategorie(Gamme gamme, boolean equitable, double volumeCibleCategorie) {
+        List<ChocolatDeMarque> produits = getListeTriee(gamme, equitable);
+    
+        // On calcule le stock spécifique à cette catégorie (ex: MQ équitable uniquement)
+        double stockActuelCategorie = calculerStockCategorie(gamme, equitable);
+
+        if (stockActuelCategorie < volumeCibleCategorie) {
+            double besoinGamme = volumeCibleCategorie - stockActuelCategorie;
+        
+            // On répartit ce besoin entre les différents chocolats de la liste (triés par prix)
+            parcourirEtAcheter(produits, besoinGamme);
         }
     }
 
-
-
-    private double calculerStockGamme(Gamme gamme) {
+    private double calculerStockCategorie(Gamme gamme, boolean equitable) {
         double total = 0;
         for (Map.Entry<ChocolatDeMarque, Double> entry : stockPredit.entrySet()) {
-            if (entry.getKey().getGamme() == gamme) {
+            ChocolatDeMarque cdm = entry.getKey();
+            if (cdm.getGamme() == gamme && cdm.isEquitable() == equitable) {
                 total += entry.getValue();
             }
         }
         return total;
+    }
+
+    private void parcourirEtAcheter(List<ChocolatDeMarque> liste, double besoinCategorie) {
+        // Si on a plusieurs marques dans la même catégorie, on divise le besoin par le nombre de marques
+        // pour ne pas tout acheter chez le premier (ou on peut tout mettre sur le moins cher)
+        if (liste.isEmpty()) return;
+
+        for (int i = 0; i < liste.size(); i++) {
+            ChocolatDeMarque actuel = liste.get(i);
+            double prixCible = this.prixDAchat.getOrDefault(actuel, 15.0);
+        
+            double prixMax = prixCible * 1.3; // Marge de négo de 30%
+            if (i < liste.size() - 1) {
+                prixMax = this.prixDAchat.getOrDefault(liste.get(i + 1), prixMax);
+            }
+
+            // On tente d'acheter une fraction du besoin pour cette marque
+            // Ici, on est agressif : on demande tout le besoin au moins cher, 
+            // ce qui restera sera demandé au suivant au tour d'après si le contrat échoue.
+            methodeIntermediaireAchat(actuel, besoinCategorie, prixCible, prixMax);
+        }
     }
 
     protected void methodeIntermediaireAchat(ChocolatDeMarque cdm, double besoin, double prixCible, double prixMax) {
