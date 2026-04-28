@@ -9,7 +9,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
 /** 
- * @author Elise Dossal
+ * @author Elise Dossal & Théophile Trillat
  */
 public class Producteur1VendeurBourse extends Producteur1AcheteurBourse implements IVendeurBourse{
 ///*
@@ -33,11 +33,31 @@ public class Producteur1VendeurBourse extends Producteur1AcheteurBourse implemen
 	 * @return la quantite en tonnes de feves de type f que this souhaite vendre 
 	 */
 	public double offre(Feve f, double cours){
-        if(f == Feve.F_MQ){
-            return 120;
-        }
+		if (blacklist > 0){
+			blacklist--;
+			return 0;
+		}
 
-        return 0;
+		double stock = getStock(f);
+
+		if (stock <= 0){
+			return 0;
+		}
+
+		if (cours < 2800 && f == Feve.F_BQ){
+   			return 0;
+		}
+
+		if (cours < 3300 && f == Feve.F_MQ){
+			return 0;
+		}
+
+		double quantite = 0.05*stock;
+
+		quantite = Math.min(quantite, 20000);
+
+		return quantite;
+
     }
 
 
