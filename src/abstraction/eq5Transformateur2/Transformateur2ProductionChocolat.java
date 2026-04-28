@@ -68,6 +68,7 @@ public class Transformateur2ProductionChocolat extends Transformateur2Production
         Double quantiteFeveBQ=quantite*0.45;
         Double quantiteMP=quantite*0.65;
         if(quantiteFeveBQ<=this.getStock_feve(Feve.F_BQ)){
+            this.remove_feve(quantiteFeveBQ,Feve.F_BQ);
             ChocolatDeMarque chocoBQ = new ChocolatDeMarque(Chocolat.C_BQ, "Ferrara Rocher", 100);
             this.add_chocolatDeMarque(chocoBQ, quantite);
         }
