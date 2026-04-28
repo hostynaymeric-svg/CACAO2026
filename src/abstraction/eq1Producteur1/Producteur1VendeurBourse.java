@@ -1,11 +1,6 @@
 package abstraction.eq1Producteur1;
 
-import java.util.List;
-
 import abstraction.eqXRomu.bourseCacao.IVendeurBourse;
-import abstraction.eqXRomu.encheres.Enchere;
-import abstraction.eqXRomu.produits.Feve;
-import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 
 /** 
@@ -13,8 +8,8 @@ import abstraction.eqXRomu.produits.Feve;
  */
 public class Producteur1VendeurBourse extends Producteur1AcheteurBourse implements IVendeurBourse{
 ///*
-    protected List<Enchere> propositions;
     private int blacklist=0;
+	protected int periode = 8 ;
 
     public Producteur1VendeurBourse(){
         super();
