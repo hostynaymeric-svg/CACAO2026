@@ -16,32 +16,31 @@ public class Transformateur4Vente extends Transformateur4Production implements I
 
     @Override
     public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-        // TODO Auto-generated method stub
         return contrat.getEcheancier();//echeance;
     }
 
     @Override
     public double propositionPrix(ExemplaireContratCadre contrat) {
         // TODO Auto-generated method stub
-        return 0.;
-    }
+        return 6500.;}
 
     @Override
     public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
         // TODO Auto-generated method stub
-        return 0.;
+        return 6000.;
     }
 
     @Override
     public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
         //TODO Auto-generated method stub
+        System.out.println("Contrat accepté : " + contrat);
     
     }
 
     @Override
     public double livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
-        // TODO Auto-generated method stub
-        return 0.;
+        double alivrer = Math.min(quantite, this.get_StockChoco_BQ().getValeur());
+        return alivrer;
     }
     
 }
