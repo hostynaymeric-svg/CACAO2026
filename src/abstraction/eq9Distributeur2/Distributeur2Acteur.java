@@ -423,7 +423,6 @@ private double obtenirCoutAchat(ChocolatDeMarque produit) {
  * Estime la demande clients pour un produit (placeholder)
  */
 private double estimerDemandeClients(ChocolatDeMarque produit) {
-    // TODO : implémenter à partir historique ventes/Filière
     return 50000.0;  // Estimation : 50T/étape
 }
 
@@ -431,7 +430,6 @@ private double estimerDemandeClients(ChocolatDeMarque produit) {
  * Estime le prix concurrent direct (placeholder)
  */
 private double estimerPrixConcurrent(ChocolatDeMarque produit) {
-    // TODO : implémenter en scrappant info transformateurs
     return 0;  // 0 = pas de concurrent identifié
 }
 }
