@@ -6,6 +6,7 @@ import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 
+
 /** @author Guillaume Leroy*/
 public class GestionCouts3 {
 
@@ -45,5 +46,10 @@ public class GestionCouts3 {
     
     public double getCoutTot(Producteur3Acteur acteur){
         return acteur.plantationeq3.getNbHectareTotal() * this.coutHectare + acteur.stock.getCoutStockage(this.coutStockageTonne) + acteur.agriculteurs.getCoutMainOeuvreTotal();
+    }
+
+    public double getCoutFeve(Feve f ,  Producteur3Acteur acteur){
+        double c= acteur.agriculteurs.getCoutMainOeuvreFeve(f) + acteur.plantationeq3.getRepartitionTerrainFeve(f)*this.coutHectare;
+        return c ;
     }
 }
