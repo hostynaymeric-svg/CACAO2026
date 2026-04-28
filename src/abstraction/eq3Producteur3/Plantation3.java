@@ -13,8 +13,9 @@ public class Plantation3 {
     /** @author Vassili Spiridonov*/
     public Map<Gamme, ArbresParGamme> plantation;
     private Journal journal;
+    private HashMap<Gamme,Double> pourcentage_eq;
     
-    public Plantation3(Journal journal) {
+    public Plantation3(Journal journal, HashMap<Gamme,Double> pourcentage_eq) {
         /** @author Vassili Spiridonov*/
         this.plantation = new HashMap<>();
 
@@ -25,6 +26,7 @@ public class Plantation3 {
             ArbresParGamme arbres = new ArbresParGamme(g);
             this.plantation.put(g, arbres);
         }
+        this.pourcentage_eq = pourcentage_eq;
     }
 
 
@@ -51,8 +53,12 @@ public class Plantation3 {
     public double getProductionFeve(Feve f) {
         /** @author Vassili Spiridonov*/
         Gamme g = f.getGamme();
+        double c= this.pourcentage_eq.get(g);
         if (plantation.containsKey(g)) {
-            return plantation.get(g).getProductionTotale();
+            if (f==Feve.F_HQ_E || f==Feve.F_MQ_E){
+                return c*plantation.get(g).getProductionTotale();
+            }
+            else {return (1-c)*plantation.get(g).getProductionTotale();}
         }
         return 0.0;
     }
@@ -93,7 +99,8 @@ public class Plantation3 {
      * Fait avancer le temps d'une période pour tous les arbres
      */
     
-    public void nextStep() {
+    public void nextStep(HashMap<Gamme,Double> new_pourcentage) {
+        this.pourcentage_eq= new_pourcentage;
         /** @author Guillaume Leroy / Victor Vannier-Moreau */
         int totalAReplanter = 0;
 
