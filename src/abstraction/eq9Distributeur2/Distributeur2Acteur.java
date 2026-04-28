@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import abstraction.eqXRomu.filiere.IMarqueChocolat;
 import abstraction.eqXRomu.clients.ClientFinal;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IActeur;
@@ -15,7 +14,7 @@ import abstraction.eqXRomu.general.Variable;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 
-public class Distributeur2Acteur implements IActeur, IDistributeurChocolatDeMarque, IMarqueChocolat {
+public class Distributeur2Acteur implements IActeur, IDistributeurChocolatDeMarque {
 	protected int cryptogramme;
 	protected Journal journal;
 	protected Map<IProduit, Double> stock;
@@ -55,8 +54,8 @@ public class Distributeur2Acteur implements IActeur, IDistributeurChocolatDeMarq
         // Initialiser le stock pour TOUS les produits disponibles (pas seulement le premier)
         if (produits != null && !produits.isEmpty()) {
             for (ChocolatDeMarque choco : produits) {
-                // Stock initial réaliste : 200 tonnes par produit
-                this.stock.put(choco, 200000.0); // 200 tonnes = 200 000 kg
+                
+                this.stock.put(choco, 0.0);
             }
         }
 
@@ -368,18 +367,7 @@ private double estimerPrixConcurrent(ChocolatDeMarque choco) {
     return Filiere.LA_FILIERE.prixMoyen(choco, etape - 1);
 }
 
-////////////////////////////////////////////////////////
-//              IMarqueChocolat                       //
-////////////////////////////////////////////////////////
-/**
- * @author Anass Ouisrani
- */
-@Override
-public List<String> getMarquesChocolat() {
-    List<String> marques = new ArrayList<>();
-    marques.add(NOM_MARQUE);
-    return marques;
-}
+
 }
 
 
