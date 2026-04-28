@@ -39,9 +39,10 @@ public class Producteur3Acteur implements IActeur {
 		this.stock = new Producteur3Stock(this.journal_stock);
 		this.StockTotal= new VariableReadOnly(this + " Stock total", this, this.stock.getStockTotal());
 		this.gestionCouts = new GestionCouts3();
+
+		this.plantationeq3= new Plantation3(journal_plantation);
 		this.agriculteurs = new Agriculteurs3(this.plantationeq3);
-		HashMap<Gamme,Double> pourcentage_eq =this.agriculteurs.getPourcentageEquitable();
-		this.plantationeq3= new Plantation3(journal_plantation, pourcentage_eq);
+
 	}
 	
 	public void initialiser() {
@@ -63,7 +64,7 @@ public class Producteur3Acteur implements IActeur {
 		// défi 1 
 		this.journal_periode.ajouter("période : "+ Filiere.LA_FILIERE.getEtape()); /** @author Vassili Spiridonov */
 		/** @author Guillaume Leroy */
-		HashMap <Gamme, Double> pourcentage_eq = this.agriculteurs.getPourcentageEquitable();
+		HashMap <Gamme, Double> pourcentage_eq = this.plantationeq3.getPourcentageEquitable();
 		this.plantationeq3.nextStep(pourcentage_eq); // permet de gérer nos hectares de plantation
 		for (Feve f : List.of(Feve.F_BQ, Feve.F_MQ, Feve.F_HQ, Feve.F_BQ_E, Feve.F_MQ_E, Feve.F_HQ_E)){
 			this.stock.addStock(f, this.plantationeq3.getProductionFeve(f)); // ajoute le nouveau stock de fève et fait vieillir le restant

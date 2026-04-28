@@ -16,8 +16,6 @@ public class Agriculteurs3 {
     private double salaireCDIMax; 
     private double salaireInterim;     
     private double salaireEnfant;  
-    
-
 
     
     public Agriculteurs3(Plantation3 plantation) {
@@ -28,11 +26,7 @@ public class Agriculteurs3 {
         this.salaireCDIMax = 12.0;
 
         // Initialisation des pourcentages par gamme
-        this.pourcentagesEquitables = new HashMap<Gamme, Double>();
-        this.pourcentagesEquitables.put(Gamme.BQ, 0.0);
-        this.pourcentagesEquitables.put(Gamme.MQ, 0.6);
-        this.pourcentagesEquitables.put(Gamme.HQ, 0.6);
-        
+        this.pourcentagesEquitables = plantation.getPourcentageEquitable();
         this.repartirTravailleurs(plantation);
         this.salaireInterim = 2*this.salaireCDIMax; // On paye deux fois plus chère les intérimaires
         this.salaireEnfant = 3.0;  // D'après les règles de fonctionnemments : 0.2€/jour 
@@ -40,9 +34,6 @@ public class Agriculteurs3 {
     }
 
 
-    public HashMap<Gamme, Double> getPourcentageEquitable(){
-        return pourcentagesEquitables;
-    }
 
     public void repartirTravailleurs(Plantation3 plantation) {
         for (Gamme g : Gamme.values()) {
@@ -98,8 +89,6 @@ public class Agriculteurs3 {
         return cout;
     }
     
-
-
 
     //Cette fonction décrit notre engagement éthique 
     

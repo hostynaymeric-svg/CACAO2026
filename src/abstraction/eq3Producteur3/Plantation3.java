@@ -13,9 +13,9 @@ public class Plantation3 {
     /** @author Vassili Spiridonov*/
     public Map<Gamme, ArbresParGamme> plantation;
     private Journal journal;
-    private HashMap<Gamme,Double> pourcentage_eq;
+    private HashMap<Gamme,Double> pourcentagesEquitables;
     
-    public Plantation3(Journal journal, HashMap<Gamme,Double> pourcentage_eq) {
+    public Plantation3(Journal journal) {
         /** @author Vassili Spiridonov*/
         this.plantation = new HashMap<>();
 
@@ -26,7 +26,16 @@ public class Plantation3 {
             ArbresParGamme arbres = new ArbresParGamme(g);
             this.plantation.put(g, arbres);
         }
-        this.pourcentage_eq = pourcentage_eq;
+
+        this.pourcentagesEquitables = new HashMap<Gamme, Double>();
+        this.pourcentagesEquitables.put(Gamme.BQ, 0.0);
+        this.pourcentagesEquitables.put(Gamme.MQ, 0.6);
+        this.pourcentagesEquitables.put(Gamme.HQ, 0.6);
+        
+    }
+
+    public HashMap<Gamme, Double> getPourcentageEquitable(){
+        return pourcentagesEquitables;
     }
 
 
@@ -53,9 +62,9 @@ public class Plantation3 {
     public double getProductionFeve(Feve f) {
         /** @author Vassili Spiridonov*/
         Gamme g = f.getGamme();
-        double c= this.pourcentage_eq.get(g);
+        double c= this.pourcentagesEquitables.get(g);
         if (plantation.containsKey(g)) {
-            if (f==Feve.F_HQ_E || f==Feve.F_MQ_E){
+            if (f==Feve.F_HQ_E || f==Feve.F_MQ_E|| f==Feve.F_BQ_E){
                 return c*plantation.get(g).getProductionTotale();
             }
             else {return (1-c)*plantation.get(g).getProductionTotale();}
@@ -100,7 +109,7 @@ public class Plantation3 {
      */
     
     public void nextStep(HashMap<Gamme,Double> new_pourcentage) {
-        this.pourcentage_eq= new_pourcentage;
+        this.pourcentagesEquitables= new_pourcentage;
         /** @author Guillaume Leroy / Victor Vannier-Moreau */
         int totalAReplanter = 0;
 
