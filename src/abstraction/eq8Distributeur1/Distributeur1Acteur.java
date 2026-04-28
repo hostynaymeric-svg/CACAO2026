@@ -90,6 +90,30 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 		}
 	}
 
+	/**
+ 	* Actualise les prix de vente en appliquant une marge sur le prix d'achat moyen pondéré.
+ 	* Stratégie actuelle : Marge fixe de 20%.
+ 	* @author Ewen Landron
+ 	*/
+	public void actualiserPrixDeVente() {
+    	// On parcourt tous les chocolats de marque de la filière
+    	for (ChocolatDeMarque cdm : Filiere.LA_FILIERE.getChocolatsProduits()) {
+			
+    	    // On récupère notre prix d'achat moyen (PMP) calculé dans Approvisionnement/ContratCadre
+    	    // Si on n'a pas de prix d'achat (pas encore de contrat), on garde un prix par défaut élevé
+    	    double prixAchatMoyen = this.prixDAchat.getOrDefault(cdm, 0.0);
+			
+    	    if (prixAchatMoyen > 0) {
+    	        // Application de la marge de 20% (PrixVente = PrixAchat * 1.20)
+    	        double nouveauPrix = prixAchatMoyen * 1.20;
+				
+    	        // On stocke le résultat
+    	        this.Prix.put(cdm, nouveauPrix);
+				
+    	    }
+    	}
+	}
+
 	public String getNom() {// NE PAS MODIFIER
 		return "EQ8";
 	}

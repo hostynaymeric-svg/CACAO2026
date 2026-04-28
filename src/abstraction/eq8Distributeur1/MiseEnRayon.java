@@ -34,8 +34,6 @@ public class MiseEnRayon extends AppelOffre {
         
         remplirEspaceCategorie(Gamme.HQ, false, espaceTotal * this.pourcentHQ);
         remplirEspaceCategorie(Gamme.HQ, true,  espaceTotal * this.pourcentHQ_E);
-        
-        System.out.println("Mise en rayon terminée. Volume total occupé : " + this.volumerayon);
     }
 
     private void remplirEspaceCategorie(Gamme gamme, boolean equitable, double espaceAlloueCategorie) {
