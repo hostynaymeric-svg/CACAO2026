@@ -13,7 +13,7 @@ import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 
 /** @author Ewen Landron */
-public class ContratCadre2 extends Approvisionnement2 implements IAcheteurContratCadre {
+public class ContratCadre2 extends Approvisionnement implements IAcheteurContratCadre {
     
     // Variables de session (redéfinies à chaque contrat)
     private double besoinCourant;
