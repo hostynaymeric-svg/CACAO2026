@@ -56,7 +56,7 @@ public class Transformateur4Production extends Transformateur4Marques implements
 
     public void next(){
         super.next();
-        this.production(150, Gamme.BQ, 45);
+        this.production(500000, Gamme.BQ, 45);
     }
         
     

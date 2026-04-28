@@ -40,6 +40,8 @@ public class Transformateur4Vente extends Transformateur4Production implements I
     @Override
     public double livrer(IProduit produit, double quantite, ExemplaireContratCadre contrat) {
         double alivrer = Math.min(quantite, this.get_StockChoco_BQ().getValeur());
+        this.get_StockChoco_BQ().ajouter(this,-alivrer);
+        System.out.println(quantite);
         return alivrer;
     }
     
