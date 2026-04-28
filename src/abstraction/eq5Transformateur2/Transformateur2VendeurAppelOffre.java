@@ -1,14 +1,10 @@
 package abstraction.eq5Transformateur2;
 
-import java.awt.Color;
-import java.util.List;
-
 import abstraction.eqXRomu.appelDOffre.AppelDOffre;
 import abstraction.eqXRomu.appelDOffre.IVendeurAO;
 import abstraction.eqXRomu.appelDOffre.OffreVente;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.produits.IProduit;
-import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.bourseCacao.BourseCacao;
@@ -23,28 +19,35 @@ public class Transformateur2VendeurAppelOffre extends Transformateur2AchatAppelO
     }
 
 	public OffreVente proposerVente(AppelDOffre offre){
-            IProduit p = offre.getProduit();
+        IProduit p = offre.getProduit();
             
-            // Si le produit n'est pas un chocolat de marque, on refuse
-            if (!(p instanceof ChocolatDeMarque)) {
-                return null;
-            }
+        // Si le produit n'est pas un chocolat de marque, on refuse
+        if (!(p instanceof ChocolatDeMarque)) {
+            return null;
+        }
             
-            ChocolatDeMarque cdm = (ChocolatDeMarque) p;
+        ChocolatDeMarque cdm = (ChocolatDeMarque) p;
             
-            // On s'assure qu'on ne vend que NOTRE marque
-            if (!cdm.getNom().equals("Ferrara Rocher")) {
-                return null;
-            }
+        // On s'assure qu'on ne vend que NOTRE marque
+        if (!cdm.getNom().equals("Ferrara Rocher")) {
+            return null;
+        }
 
-            OffreVente OV = new OffreVente(offre, this, offre.getProduit(),((BourseCacao) (Filiere.LA_FILIERE.getActeur("BourseCacao"))).getCours(Feve.F_MQ).getValeur()*1.18*offre.getQuantiteT());
-			
-			Chocolat c = cdm.getChocolat();
-			this.ProductionChocolat(c, offre.getQuantiteT());
-            return OV;
+        double stockDispo = this.getStock_chocolatDeMarque(cdm);
+        if (stockDispo < offre.getQuantiteT()) {
+            return null; // Pas assez de stock, on passe notre tour
+        }
+
+        // 4. On calcule le prix et on fait l'offre (sans lancer aucune production ici !)
+        double coursMQ = ((BourseCacao) (Filiere.LA_FILIERE.getActeur("BourseCacao"))).getCours(Feve.F_MQ).getValeur();
+        double prixVente = coursMQ * 1.18 * offre.getQuantiteT();
+
+        return new OffreVente(offre, this, cdm, prixVente);
     }
 
 	public void notifierVenteAO(OffreVente propositionRetenue){
+        ChocolatDeMarque cdm = (ChocolatDeMarque) propositionRetenue.getProduit();
+        this.remove_chocolatDeMarque(cdm, propositionRetenue.getQuantiteT());
         this.getJournaux().get(7).ajouter(propositionRetenue.toString()+ "\n");
     }
 

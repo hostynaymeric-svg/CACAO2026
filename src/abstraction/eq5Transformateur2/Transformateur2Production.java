@@ -1,6 +1,6 @@
 package abstraction.eq5Transformateur2;
 
-/** @author Pierre */
+/** @author Pierre GUTTIEREZ */
 public class Transformateur2Production extends Transformateur2FabriquantChocolatDeMarque{
     
     // Attributs
