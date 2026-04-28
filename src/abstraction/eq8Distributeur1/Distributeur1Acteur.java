@@ -12,6 +12,7 @@ import abstraction.eqXRomu.filiere.IActeur;
 import abstraction.eqXRomu.filiere.IDistributeurChocolatDeMarque;
 import abstraction.eqXRomu.general.Journal;
 import abstraction.eqXRomu.general.Variable;
+import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
 import abstraction.eqXRomu.produits.IProduit;
 
@@ -61,10 +62,31 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	/** @author Alexandre Cornet */
 	public void initialiser() {
 		List<ChocolatDeMarque> p=Filiere.LA_FILIERE.getChocolatsProduits();
+		System.out.println(p);
+		ChocolatDeMarque C_MQ_ProntellaM = p.get(0);
+		this.Prix.put(C_MQ_ProntellaM, 14000.0);
+		ChocolatDeMarque C_HQ_Ferrara = p.get(1);
+		this.Prix.put(C_HQ_Ferrara, 27000.0);
+		ChocolatDeMarque C_MQ_Ferrara = p.get(2);
+		this.Prix.put(C_MQ_Ferrara, 14000.0);
+		ChocolatDeMarque C_BQ_Ferrara = p.get(3);
+		this.Prix.put(C_BQ_Ferrara, 22000.0);
+		ChocolatDeMarque C_HQ_E_Villors = p.get(4);
+		this.Prix.put(C_HQ_E_Villors, 30000.0);
+		ChocolatDeMarque C_HQ_Villors = p.get(5);
+		this.Prix.put(C_HQ_Villors, 27000.0);
+		ChocolatDeMarque C_MQ_E_Villors = p.get(6);
+		this.Prix.put(C_MQ_E_Villors, 14000.0);
+		ChocolatDeMarque C_MQ_Villors = p.get(7);
+		this.Prix.put(C_MQ_Villors, 14000.0);
+		ChocolatDeMarque C_BQ_E_Villors = p.get(8);
+		this.Prix.put(C_BQ_E_Villors, 25000.0);
+		ChocolatDeMarque C_BQ_Villors = p.get(9);
+		this.Prix.put(C_BQ_Villors, 22000.0);
+
 		for (int i=0; i<p.size(); i++){
 			this.Stock.put((IProduit)(p.get(i)),1000000.0);
 			this.Rayon.put((IProduit)(p.get(i)),0.0);
-			this.Prix.put((IProduit)(p.get(i)),8000.0);
 			this.volumeStock.ajouter(this,getQuantiteEnStock((IProduit)(p.get(i)),this.cryptogramme));
 		}
 	}
@@ -281,12 +303,21 @@ public class Distributeur1Acteur implements IDistributeurChocolatDeMarque {
 	/** @author Alexandre Cornet */
 	@Override
 	public double prix(ChocolatDeMarque choco) {
-		return this.getPrixProduit(choco, this.cryptogramme);
+		switch (choco.getChocolat()) {
+		case C_HQ_E: return 30000;
+		case C_HQ : return 27000;
+		case C_MQ_E:return 16000;
+		case C_MQ :return 14000;
+		case C_BQ_E :return 25000;
+		case C_BQ : return 22000;
+		default:
+			return 0.0;
+		}
 	}
 	/** @author Alexandre Cornet */
 	@Override
 	public double quantiteEnVente(ChocolatDeMarque choco, int crypto) {
-		return this.getQuantiteEnRayon(choco, this.cryptogramme);
+		return getQuantiteEnRayon((IProduit)(choco), crypto);
 	}
 	/** @author Alexandre Cornet */
 	@Override
