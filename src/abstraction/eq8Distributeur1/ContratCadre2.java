@@ -121,10 +121,32 @@ public class ContratCadre2 extends Approvisionnement implements IAcheteurContrat
     }
 
     public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
-        this.journal5.ajouter(Color.GREEN, Color.BLACK, "CC conclu : " + contrat.toString());
-        if (!this.mesContrats.contains(contrat)) {
-            this.mesContrats.add(contrat);
-        }
+        IProduit p = (IProduit) contrat.getProduit();
+        if (p instanceof ChocolatDeMarque) {
+            ChocolatDeMarque cdm = (ChocolatDeMarque) p;
+        
+            // Ajout du contrat à la liste si pas déjà présent
+            if (!this.mesContrats.contains(contrat)) {
+                this.mesContrats.add(contrat);
+            }
+
+            // MISE À JOUR DU PRIX MOYEN PONDÉRÉ
+            // On utilise la logique de ChocolatsAchetes (quantité du tour) 
+            // combinée au stock existant pour pondérer le nouveau prix
+            double qteDejaAchetee = this.ChocolatsAchetes.getOrDefault(cdm, 0.0);
+            double ancienPrixMoyen = this.prixDAchat.getOrDefault(cdm, contrat.getPrix());
+        
+            double qteNouveauContrat = contrat.getQuantiteTotale();
+            double nouveauPrixMoyen = ((ancienPrixMoyen * qteDejaAchetee) + (contrat.getPrix() * qteNouveauContrat)) / (qteDejaAchetee + qteNouveauContrat);
+
+            this.prixDAchat.put(cdm, nouveauPrixMoyen);
+        
+            // Actualisation du flux physique pour le tour en cours
+            this.actualiserStockPredit(contrat);
+
+            this.journal5.ajouter(Color.GREEN, Color.BLACK, "CC conclu (" + cdm + ") au prix unitaire de " + contrat.getPrix());
+            this.journal5.ajouter(Color.CYAN, Color.BLACK, "Nouveau PMP pour " + cdm + " : " + nouveauPrixMoyen);
+    }
     }
 
     public void receptionner(IProduit p, double quantiteEnTonnes, ExemplaireContratCadre contrat) {
