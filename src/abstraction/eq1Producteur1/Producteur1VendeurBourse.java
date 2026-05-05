@@ -117,6 +117,7 @@ public class Producteur1VendeurBourse extends Producteur1VendeurContractCadre im
 		return res;
 	}
 
+
 }
 
 //*/
