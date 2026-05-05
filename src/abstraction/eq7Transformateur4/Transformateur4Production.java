@@ -64,6 +64,14 @@ public class Transformateur4Production extends Transformateur4Marques implements
         }
         super.next();
         this.production(50000, Gamme.BQ, 45);
+        
+        // Auteur : Aymeric
+        // Coûts de stockage du chocolat : 20 euros par tonne
+        double totalChoco = this.get_StockChoco_BQ().getValeur() + this.get_StockChoco_MQ().getValeur() + this.get_StockChoco_HQ().getValeur();
+        double coutStockage = totalChoco * 20;
+        if(coutStockage > 0){
+            Filiere.LA_FILIERE.getBanque().payerCout(this, cryptogramme, "Coûts de stockage du chocolat", coutStockage);
+        }
     }
         
     
