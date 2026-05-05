@@ -4,9 +4,11 @@ import java.util.List;
 
 import abstraction.eqXRomu.produits.Chocolat;
 import abstraction.eqXRomu.produits.ChocolatDeMarque;
+import abstraction.eqXRomu.produits.Feve;
 import abstraction.eqXRomu.produits.Gamme;
 import abstraction.eqXRomu.filiere.Filiere;
 import abstraction.eqXRomu.filiere.IFabricantChocolatDeMarque;
+import abstraction.eqXRomu.bourseCacao.BourseCacao;
 //Auteur : Matteo
 public class Transformateur4Production extends Transformateur4Marques implements IFabricantChocolatDeMarque{
     public Transformateur4Production(){
@@ -64,6 +66,10 @@ public class Transformateur4Production extends Transformateur4Marques implements
         }
         super.next();
         this.production(50000, Gamme.BQ, 45);
+        BourseCacao bourse = (BourseCacao)(Filiere.LA_FILIERE.getActeur("BourseCacao"));
+        this.cours_feves_bq.setValeur(this, bourse.getCours(Feve.F_BQ).getValeur());
+        this.cout_prod.setValeur(this, 0.45*this.cours_feves_bq.getValeur()+0.55*1000);
+
     }
         
     
