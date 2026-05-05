@@ -70,6 +70,14 @@ public class Transformateur4Production extends Transformateur4Marques implements
         this.cours_feves_bq.setValeur(this, bourse.getCours(Feve.F_BQ).getValeur());
         this.cout_prod.setValeur(this, 0.45*this.cours_feves_bq.getValeur()+0.55*1000);
 
+        
+        // Auteur : Aymeric
+        // Coûts de stockage du chocolat : 20 euros par tonne
+        double totalChoco = this.get_StockChoco_BQ().getValeur() + this.get_StockChoco_MQ().getValeur() + this.get_StockChoco_HQ().getValeur();
+        double coutStockage = totalChoco * 20;
+        if(coutStockage > 0){
+            Filiere.LA_FILIERE.getBanque().payerCout(this, cryptogramme, "Coûts de stockage du chocolat", coutStockage);
+        }
     }
         
     
