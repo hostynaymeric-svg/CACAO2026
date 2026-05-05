@@ -79,8 +79,8 @@ public class Producteur2Acteur extends Producteur2couts implements IActeur {
 		// Stock total général
 		res.add(this.stockTotal);
 		
-		// Stocks détaillés par type de fève
-		for (Feve feve : Feve.values()) {
+		// Stocks détaillés par type de fève (hors BQ_E et MQ_E)
+		for (Feve feve : new Feve[] {Feve.F_HQ, Feve.F_BQ, Feve.F_MQ, Feve.F_HQ_E}) {
 			Variable stockFeve = this.stockvar.get(feve);
 			if (stockFeve != null) {
 				res.add(stockFeve);
