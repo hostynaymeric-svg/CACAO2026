@@ -80,7 +80,7 @@ public class Producteur2Acteur extends Producteur2couts implements IActeur {
 		res.add(this.stockTotal);
 		
 		// Stocks détaillés par type de fève
-		for (Feve feve : new Feve[] {Feve.F_HQ, Feve.F_BQ, Feve.F_MQ, Feve.F_HQ_E}) {
+		for (Feve feve : Feve.values()) {
 			Variable stockFeve = this.stockvar.get(feve);
 			if (stockFeve != null) {
 				res.add(stockFeve);
@@ -138,6 +138,15 @@ public class Producteur2Acteur extends Producteur2couts implements IActeur {
 	// Renvoie le solde actuel de l'acteur
 	protected double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
+	}
+
+	@Override
+	public void TaxeStockage() {
+		double montant = this.stockTotal.getValeur(this.cryptogramme) * this.cout_stockage;
+		if (montant > 0) {
+			Filiere.LA_FILIERE.getBanque().payerCout(this, this.cryptogramme, "Taxe de stockage", montant);
+			this.JournalBanque.ajouter("Paiement de la taxe de stockage : " + montant + "€ pour " + this.stockTotal.getValeur(this.cryptogramme) + " T");
+		}
 	}
 
 	////////////////////////////////////////////////////////
