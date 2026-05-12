@@ -263,14 +263,15 @@ public class Transformateur2Stock extends Transformateur2Marque{
         this.update_peremption();
         
         Double stockTotal= this.getStock_feve_total();
-        for (Double stock_chocoMarque:this.stock_ChocolatDeMarque.values()){
+        for (Object key : this.stock_ChocolatDeMarque.keySet()) {
+            Double stock_chocoMarque = this.stock_ChocolatDeMarque.get(key);
             stockTotal=stockTotal+stock_chocoMarque;
         }
         if(stockTotal > 0.0){
             Filiere.LA_FILIERE.getBanque().payerCout(this,this.cryptogramme,"EQ5 payement stockage",Transformateur2Stock.prixStockageTonne*stockTotal);
         }
         this.getJournaux().get(10).ajouter("Payement de " + Transformateur2Stock.prixStockageTonne*stockTotal + " pour le stockage"+"\n");
-        
+        this.getJournaux().get(10).ajouter("stock feves: "+this.getStock_feve_total());
     }
 
 }
