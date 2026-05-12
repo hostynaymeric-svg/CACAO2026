@@ -35,7 +35,7 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
 
         for (ChocolatDeMarque choco : produits) {
             double stockActuel = this.stock.getOrDefault(choco, 0.0);
-            double stockProjete = stockActuel + restantDu(choco);
+            double stockProjete = stockActuel ;
             double seuilMin = 10000.0;    // 10 tonnes : seuil minimum 
             double stockCible = 50000.0;  // 50 tonnes : stock visé
 
