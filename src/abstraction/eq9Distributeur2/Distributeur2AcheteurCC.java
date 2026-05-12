@@ -55,7 +55,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
         }
 
         this.indicateurStockTotal.setValeur(this, getStockTotal());
-        journalStocks.ajouter("Stock total : " + (getStockTotal()/1000) + " tonnes");
+        journalStocks.ajouter("Stock total : " + (getStockTotal()) + " tonnes");
     }
 
 
@@ -63,7 +63,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
      * frais de stockage pour cette étape
      */
     protected void payerFraisStockage() {
-        double stockTotalT = getStockTotal() / 1000.0;
+        double stockTotalT = getStockTotal();
         double fraisStockage = stockTotalT * 120.0; // 120€/t
         if (fraisStockage > 0) {
             Filiere.LA_FILIERE.getBanque().payerCout(this, this.cryptogramme, "Frais de stockage", fraisStockage);
@@ -172,7 +172,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
             prixPropose, // on suppose que c’est le coût d’achat
             choco.getNom(),
             this.stock.getOrDefault(choco, 0.0),
-            20000.0, // demande estimée simple
+            20.0, // demande estimée simple
             prixPropose 
         );
 
@@ -191,7 +191,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
 
         // Situation financière
         double solde = getSolde();
-        double quantiteTotale = contrat.getQuantiteTotale() / 1000.0; // en tonnes
+        double quantiteTotale = contrat.getQuantiteTotale(); // en tonnes
         double coutTotalEstime = quantiteTotale * prixPropose;
 
         // Si on n'a pas les fonds, être plus ferme dans la négociation
@@ -310,7 +310,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
     @Override
     public void receptionner(IProduit produit, double quantiteEnTonnes, ExemplaireContratCadre contrat) {
 
-        double quantiteEnKg = quantiteEnTonnes * 1000.0;
+        double quantiteEnKg = quantiteEnTonnes;
 
         // Ajouter au stock
         double stockActuel = this.stock.getOrDefault(produit, 0.0);
@@ -319,7 +319,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
         // Mettre à jour l'indicateur de stock total
         this.indicateurStockTotal.setValeur(this, getStockTotal());
 
-        this.journalStocks.ajouter("Livraison reçue : " + (quantiteEnKg/1000) + "t de " +
+        this.journalStocks.ajouter("Livraison reçue : " + (quantiteEnKg) + "t de " +
                            produit + " (contrat cadre)");
     }
 
@@ -331,7 +331,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
         double res = 0.0;
         for (ExemplaireContratCadre contrat : this.contratsEnCours) {
             if (contrat.getProduit().equals(produit)) {
-                res += contrat.getQuantiteRestantALivrer() * 1000.0;
+                res += contrat.getQuantiteRestantALivrer();
             }
         }
         return res;
@@ -356,19 +356,19 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
         for (ChocolatDeMarque choco : produits) {
             double stockActuel = this.stock.getOrDefault(choco, 0.0);
             double enCours = restantDu(choco);
-            double seuilDeSecurite = 10000 ;
+            double seuilDeSecurite = 10 ;
             double stockProjete = stockActuel + enCours;
 
             if (stockProjete < seuilDeSecurite) {
-                double quantiteCible = 50000.0; // 50 tonnes
+                double quantiteCible = 50.0; // 50 tonnes
                 double quantiteAcheter = quantiteCible - stockProjete;
-                if (quantiteAcheter < 1000.0) { // Minimum 1 tonne
+                if (quantiteAcheter < 1.0) { // Minimum 1 tonne
                     continue;
                 }
 
                 // Vérifier les fonds disponibles
                 double prixEstime = getPrixMaxAcceptable(choco);
-                double coutEstime = (quantiteAcheter / 1000.0) * prixEstime;
+                double coutEstime = (quantiteAcheter / 1.0) * prixEstime;
                 if (getSolde() < coutEstime * 1.2) { // Marge de sécurité
                     this.journalCC.ajouter("Fonds insuffisants pour CC " + choco.getNom()
                         + " : besoin " + coutEstime + "€, solde " + getSolde() + "€");
@@ -396,7 +396,7 @@ public class Distributeur2AcheteurCC extends Distributeur2AcheteurAO implements 
                         this, vendeur, choco, echeancierPropose, this.cryptogramme, false);
 
                     if (contrat != null) {
-                        this.journalCC.ajouter("Proposition CC initiée pour " + (quantiteAcheter/1000)
+                        this.journalCC.ajouter("Proposition CC initiée pour " + (quantiteAcheter)
                             + "t de " + choco.getNom() + " chez " + vendeur.getNom());
                         propositionReussie = true;
                         break; // On s'arrête au premier vendeur qui accepte de négocier

@@ -39,20 +39,20 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
 
         for (ChocolatDeMarque choco : produits) {
             double stockActuel = this.stock.getOrDefault(choco, 0.0);
-            double stockProjete = stockActuel + restantDu(choco);
-            double seuilMin = 10000.0;    // 10 tonnes : seuil minimum
-            double stockCible = 50000.0;  // 50 tonnes : stock visé
+            double stockProjete = stockActuel ;
+            double seuilMin = 10.0;    // 10 tonnes : seuil minimum 
+            double stockCible = 50.0;  // 50 tonnes : stock visé
 
             // Calculer la quantité à acheter en tenant compte des livraisons CC déjà prévues
             double quantiteAO = 0.0;
             if (stockProjete < seuilMin) {
                 quantiteAO = stockCible - stockProjete;
-                this.journalAO.ajouter("Stock critique pour " + choco.getNom()
-                    + " (" + (stockActuel/1000) + "t actuel, " + (stockProjete/1000) + "t projeté) → réappro obligatoire");
+                this.journalAO.ajouter("Stock critique pour " + choco.getNom() 
+                    + " (" + (stockActuel) + "t actuel, " + (stockProjete) + "t projeté) → réappro obligatoire");
             } else if (stockProjete < stockCible) {
                 quantiteAO = (stockCible - stockProjete) * 0.5;
-                this.journalAO.ajouter("Stock bas pour " + choco.getNom()
-                    + " (" + (stockActuel/1000) + "t actuel, " + (stockProjete/1000) + "t projeté) → réappro partiel");
+                this.journalAO.ajouter("Stock bas pour " + choco.getNom() 
+                    + " (" + (stockActuel) + "t actuel, " + (stockProjete) + "t projeté) → réappro partiel");
             } else {
                 continue;
             }
@@ -64,7 +64,7 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
 
             // Vérifier qu'on a les fonds suffisants
             double prixEstime = prix(choco);
-            double coutEstime = (quantiteAO / 1000.0) * prixEstime * 0.75;
+            double coutEstime = (quantiteAO) * prixEstime * 0.75;
             if (getSolde() < coutEstime) {
                 this.journalAO.ajouter("Fonds insuffisants pour " + choco.getNom() 
                     + " : solde=" + getSolde() + "€, besoin=" + coutEstime + "€");
@@ -81,7 +81,7 @@ public class Distributeur2AcheteurAO extends Distributeur2Acteur implements IAch
                 this.stock.put(choco, stockActuelApreAchat + quantiteAchetee);
                 this.indicateurStockTotal.setValeur(this, getStockTotal());
 
-                this.journalAO.ajouter("Achat réussi : " + (quantiteAchetee/1000) + "t de "
+                this.journalAO.ajouter("Achat réussi : " + (quantiteAchetee) + "t de "
                     + choco.getNom() + " à " + prixAchat + "€/T chez "
                     + offreRetenue.getVendeur().getNom());
             } else {
